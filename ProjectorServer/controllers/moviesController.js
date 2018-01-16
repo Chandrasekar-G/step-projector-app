@@ -19,10 +19,21 @@ var dbService= require("../services/dbService");
 
  exports.addNewMovie = function(req, res, next) {
       var movie = req.body;
+      var db=dbService.database;
       console.log(movie);
-      return res.json({
+      var moviesCollection = db.collection("movies");
+
+      moviesCollection.insert(movie).then(save_data=>{
+        return res.json({
           isSuccess: true,
+          data: save_data
+        });
+      }).catch(err=>{
+        return res.json({
+          isSuccess: false
+        });
       });
+
   };
 
   exports.getMovieDetails = function(req, res, next) {
