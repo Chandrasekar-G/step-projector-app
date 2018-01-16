@@ -26,12 +26,10 @@ a {
 
 header .logo {
   width: 200px;
-  margin: 16px 0;
 }
 
 header ul {
   list-style-type: none;
-  padding-top: 16px;
 }
 
 header ul li {
@@ -54,14 +52,15 @@ header, section, footer{
     margin-left: 40px;
 }
 
-.btn {
-  width: 30px;
-  height: 30px;
-  border: none;
-  border-radius: 50%;
-  background-repeat: no-repeat;
-  background-size: contain;
-  margin: 5px;
+.link {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin: 5px;
+    display: inline-block;
 }
 
 footer {
@@ -70,16 +69,19 @@ footer {
   padding: 20px 0;
 }
 
-.btn.facebook {
-  background-image: url('../images/facebook.png');
+.link-grp {
+    margin-left: 40px;
+}
+.link.facebook {
+    background-image: url('../images/facebook.png');
 }
 
-.btn.twitter {
-  background-image: url('../images/twitter.png');
+.link.twitter {
+    background-image: url('../images/twitter.png');
 }
 
-.btn.insta {
-  background-image: url('../images/instagram.png');
+.link.insta {
+    background-image: url('../images/instagram.png');
 }
 
 footer .logo {
