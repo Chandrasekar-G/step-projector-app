@@ -1,54 +1,94 @@
-var dbService= require("../services/dbService");
+var dbService= require("../services/dbService"),
+STATUS_CODE = require("../constants/statusCodes").STATUS_CODE;
 
  exports.getAllMovies = function(req, res, next) {
-   // Get the documents collection
-   var db=dbService.database;
-   var moviesCollection = db.collection("movies");
-   moviesCollection.find().toArray().then(result=>{
-           res.json({
-             isSuccess: true,
-             data: result
-           });
-   }).catch(err=>{
-     console.log(err);
-     res.json({
-       isSuccess: false
+   try {
+     // Get the documents collection
+     var db=dbService.database;
+     var moviesCollection = db.collection("movies");
+     moviesCollection.find().toArray().then(result=>{
+             res.json({
+               isSuccess: true,
+               data: result
+             });
+     }).catch(err=>{
+       console.log(err);
+       res.json({
+         isSuccess: false,
+         error: STATUS_CODE.DB_ERROR
+       });
      });
-   });
+   } catch (err) {
+     res.json({
+       isSuccess: false,
+       error: STATUS_CODE.SERVER_ERROR
+     });
+   }
  };
 
  exports.addNewMovie = function(req, res, next) {
+   try {
       var movie = req.body;
-      var db=dbService.database;
-      console.log(movie);
-      var moviesCollection = db.collection("movies");
+      if (!movie.name || !movie.releaseYear || !movie.language ||
+          !movie.rating || isNaN(movie.releaseYear) || !movie.thumbnailUrl ||
+          !movie.posterUrl || !movie.plot || !movie.cast || isNaN(movie.rating)) {
+          res.json({
+            isSuccess: false,
+            error: STATUS_CODE.INSUFFICIENT_PARAMS
+          });
+        } else {
+          var db=dbService.database;
+          console.log(movie);
+          var moviesCollection = db.collection("movies");
 
-      moviesCollection.insert(movie).then(save_data=>{
-        return res.json({
-          isSuccess: true,
-          data: save_data
+          moviesCollection.insert(movie).then(save_data=>{
+            return res.json({
+              isSuccess: true,
+              data: save_data
+            });
+          }).catch(err=>{
+            return res.json({
+              isSuccess: false,
+              error: STATUS_CODE.DB_ERROR
+            });
+          });
+        }
+      } catch (err) {
+        res.json({
+          isSuccess: false,
+          error: STATUS_CODE.SERVER_ERROR
         });
-      }).catch(err=>{
-        return res.json({
-          isSuccess: false
-        });
-      });
-
+      }
   };
 
   exports.getMovieDetails = function(req, res, next) {
+    try {
       console.log(req.params.movieName);
       var db=dbService.database;
       var moviesCollection = db.collection("movies");
       moviesCollection.find({ name: req.params.movieName }).toArray().then(result=>{
-              res.json({
-                isSuccess: true,
-                data: result
-              });
+        if (result.length > 0) {
+          res.json({
+            isSuccess: true,
+            data: result
+          });
+        } else {
+          res.json({
+            isSuccess: false,
+            error: STATUS_CODE.MOVIE_NOT_FOUND
+          });
+        }
       }).catch(err=>{
         console.log(err);
         res.json({
-          isSuccess: false
+          isSuccess: false,
+          error: STATUS_CODE.DB_ERROR
         });
-      })
+      });
+    } catch (err) {
+      res.json({
+        isSuccess: false,
+        error: STATUS_CODE.SERVER_ERROR
+      });
+    }
   };
