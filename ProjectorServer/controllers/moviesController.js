@@ -38,7 +38,17 @@ var dbService= require("../services/dbService");
 
   exports.getMovieDetails = function(req, res, next) {
       console.log(req.params.movieName);
-      return res.json({
-          isSuccess: true,
-      });
+      var db=dbService.database;
+      var moviesCollection = db.collection("movies");
+      moviesCollection.find({ name: req.params.movieName }).toArray().then(result=>{
+              res.json({
+                isSuccess: true,
+                data: result
+              });
+      }).catch(err=>{
+        console.log(err);
+        res.json({
+          isSuccess: false
+        });
+      })
   };
