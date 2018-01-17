@@ -43,8 +43,7 @@ STATUS_CODE = require("../constants/statusCodes").STATUS_CODE;
 
           moviesCollection.insert(movie).then(save_data=>{
             return res.json({
-              isSuccess: true,
-              data: save_data
+              "isSuccess": true
             });
           }).catch(err=>{
             return res.json({
@@ -70,7 +69,7 @@ STATUS_CODE = require("../constants/statusCodes").STATUS_CODE;
         if (result.length > 0) {
           res.json({
             isSuccess: true,
-            data: result
+            data: result[0]
           });
         } else {
           res.json({
