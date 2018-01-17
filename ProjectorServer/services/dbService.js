@@ -3,7 +3,7 @@ var MongoClient = require('mongodb').MongoClient;
 module.exports = {
   createConnection: function() {
 
-    MongoClient.connect("mongodb://localhost:27017").then(client=> {
+    MongoClient.connect("mongodb://sirius:password@ds257627.mlab.com:57627/step-projector-app").then(client=> {
             console.log('Connection established');
             module.exports.database=client.db('projector');
     }).catch(err=>{
